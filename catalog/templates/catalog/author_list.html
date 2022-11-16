@@ -1,0 +1,40 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h1>Author List</h1>
+    {% if author_list %}
+        {% if perms.catalog.can_mark_returned %}
+            <ul>
+                {% for author in author_list %}
+                    <li>
+                        <a href="{{ author.get_absolute_url }}" style="text-decoration:none">
+                            {{ author.last_name }}, {{ author.first_name }}</a>
+                        {% if author.date_of_birth %}
+                            <small>({{ author.date_of_birth }})</small>
+                        {% else %}
+                            -
+                        {% endif %}
+                        <strong><a href="{% url 'author-update' author.id%}"
+                                   style="text-decoration:none; color:black">- <button>Update</button></a></strong>
+                        <strong><a href="{% url 'author-delete' author.id%}"
+                                   style="text-decoration:none; color:black">- <button>Delete</button></a></strong>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            {% for author in author_list %}
+                <li>
+                    <a href="{{ author.get_absolute_url }}" style="text-decoration:none">
+                        {{ author.last_name }}, {{ author.first_name }}</a>
+                    {% if author.date_of_birth %}
+                        <small>({{ author.date_of_birth }})</small>
+                    {% else %}
+                        -
+                    {% endif %}
+                </li>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <p>There is no book written by this author in the library.</p>
+    {% endif %}
+{% endblock %}
